@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eugene Antwi - Under Maintenance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: slideInFromTop 1s ease-out 0.5s forwards;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideInFromBottom 1s ease-out 1s forwards;
+        }
+
+        /* Main Animation Container */
+        .maintenance-animation {
+            width: 500px;
+            height: 400px;
+            position: relative;
+            margin: 2rem auto;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.5s forwards;
+        }
+
+        /* Website/Monitor Structure */
+        .website-frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px;
+            height: 200px;
+            background: #fff;
+            border-radius: 15px;
+            border: 8px solid #333;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .website-screen {
+            width: 100%;
+            height: 100%;
+            background: #f5f5f5;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Browser Elements */
+        .browser-bar {
+            height: 30px;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .browser-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27ca3f; }
+
+        .address-bar {
+            flex: 1;
+            height: 18px;
+            background: #fff;
+            border-radius: 3px;
+            margin-left: 15px;
+            border: 1px solid #ccc;
+        }
+
+        /* Animated Elements Inside Website */
+        .website-content {
+            padding: 20px;
+            height: calc(100% - 30px);
+            position: relative;
+        }
+
+        .content-lines {
+            position: absolute;
+            width: 100%;
+            top: 20px;
+        }
+
+        .content-line {
+            height: 4px;
+            background: #ddd;
+            margin-bottom: 8px;
+            border-radius: 2px;
+            opacity: 0;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: loadingLine 0.8s ease-out forwards;
+        }
+
+        .line-1 { width: 80%; animation-delay: 2s; }
+        .line-2 { width: 60%; animation-delay: 2.2s; }
+        .line-3 { width: 90%; animation-delay: 2.4s; }
+        .line-4 { width: 40%; animation-delay: 2.6s; }
+
+        @keyframes loadingLine {
+            to {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+        /* Broken/Error Effect */
+        .error-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 0, 0, 0.1);
+            opacity: 0;
+            animation: errorFlash 0.3s ease-out 3s forwards;
+        }
+
+        @keyframes errorFlash {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Black Figure Characters */
+        .maintenance-worker {
+            position: absolute;
+            width: 40px;
+            height: 60px;
+            bottom: 50px;
+            opacity: 0;
+        }
+
+        .worker-1 {
+            left: 80px;
+            animation: workerAppear 0.8s ease-out 2.5s forwards, workerWork 3s ease-in-out 3.5s infinite;
+        }
+
+        .worker-2 {
+            right: 80px;
+            animation: workerAppear 0.8s ease-out 3s forwards, workerWork 2.5s ease-in-out 4s infinite;
+        }
+
+        .worker-body {
+            width: 20px;
+            height: 35px;
+            background: #000;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .worker-head {
+            width: 16px;
+            height: 16px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: -12px;
+            left: 2px;
+        }
+
+        .worker-helmet {
+            width: 18px;
+            height: 10px;
+            background: #3b82f6;
+            border-radius: 9px 9px 0 0;
+            position: absolute;
+            top: -18px;
+            left: 1px;
+        }
+
+        .worker-arms {
+            position: absolute;
+            top: 8px;
+            left: -8px;
+            width: 6px;
+            height: 18px;
+            background: #000;
+            border-radius: 3px;
+            transform-origin: top center;
+            animation: armMove 2s ease-in-out infinite;
+        }
+
+        .worker-arms::after {
+            content: '';
+            position: absolute;
+            right: -20px;
+            width: 6px;
+            height: 18px;
+            background: #000;
+            border-radius: 3px;
+        }
+
+        .worker-legs {
+            position: absolute;
+            bottom: -18px;
+            left: 3px;
+            width: 5px;
+            height: 18px;
+            background: #000;
+            border-radius: 3px;
+        }
+
+        .worker-legs::after {
+            content: '';
+            position: absolute;
+            right: -9px;
+            width: 5px;
+            height: 18px;
+            background: #000;
+            border-radius: 3px;
+        }
+
+        /* Tools */
+        .worker-tool {
+            position: absolute;
+            right: -25px;
+            top: 15px;
+            width: 12px;
+            height: 3px;
+            background: #666;
+            border-radius: 2px;
+            transform-origin: left center;
+            animation: toolMove 2s ease-in-out infinite;
+        }
+
+        .worker-1 .worker-tool::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: -2px;
+            width: 8px;
+            height: 7px;
+            background: #666;
+            border-radius: 2px;
+        }
+
+        @keyframes workerAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes workerWork {
+            0%, 100% {
+                transform: translateX(0) scale(1);
+            }
+            25% {
+                transform: translateX(8px) scale(1.05);
+            }
+            50% {
+                transform: translateX(-5px) scale(0.95);
+            }
+            75% {
+                transform: translateX(3px) scale(1.02);
+            }
+        }
+
+        @keyframes armMove {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(20deg);
+            }
+        }
+
+        @keyframes toolMove {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(15deg);
+            }
+        }
+
+        /* Floating Elements */
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .floating-gear {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            opacity: 0;
+            animation: gearAppear 0.5s ease-out 3.5s forwards, gearFloat 4s ease-in-out 4s infinite, gearRotate 3s linear 4s infinite;
+        }
+
+        .gear-1 {
+            top: 60px;
+            left: 60px;
+        }
+
+        .gear-2 {
+            top: 80px;
+            right: 60px;
+            animation-delay: 4s, 4.5s, 4.5s;
+            animation-direction: normal, normal, reverse;
+        }
+
+        .gear {
+            width: 100%;
+            height: 100%;
+            border: 3px solid #000;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .gear::before,
+        .gear::after {
+            content: '';
+            position: absolute;
+            background: #000;
+            border-radius: 2px;
+        }
+
+        .gear::before {
+            width: 6px;
+            height: 10px;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .gear::after {
+            width: 6px;
+            height: 10px;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        @keyframes gearAppear {
+            from {
+                opacity: 0;
+                transform: scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes gearFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes gearRotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Warning/Error Icons */
+        .warning-icon {
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            opacity: 0;
+            animation: warningAppear 0.8s ease-out 3.2s forwards, warningPulse 2s ease-in-out 4s infinite;
+        }
+
+        .warning-triangle {
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 35px solid #f59e0b;
+            position: relative;
+        }
+
+        .warning-triangle::after {
+            content: '!';
+            position: absolute;
+            top: 8px;
+            left: -3px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        @keyframes warningAppear {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        @keyframes warningPulse {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.1);
+            }
+        }
+
+        /* Main Message */
+        .message {
+            font-size: 2rem;
+            color: white;
+            margin: 2rem 0 1rem 0;
+            opacity: 0;
+            animation: slideInFromLeft 1s ease-out 4.5s forwards;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .description {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideInFromRight 1s ease-out 5s forwards;
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromBottom {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Contact Info */
+        .contact {
+            opacity: 0;
+            animation: fadeIn 1s ease-out 5.5s forwards;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 2rem;
+        }
+
+        .contact a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .contact a:hover {
+            color: #8BC34A;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .maintenance-animation {
+                width: 350px;
+                height: 300px;
+            }
+            
+            .website-frame {
+                width: 280px;
+                height: 180px;
+            }
+            
+            .message {
+                font-size: 1.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .description {
+                font-size: 1rem;
+            }
+        }
+
+        /* Background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-100px) rotate(180deg);
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <h1 class="logo">Eugene Antwi</h1>
+        <p class="subtitle">Website Under Maintenance</p>
+        
+        <div class="maintenance-animation">
+            <!-- Website/Monitor Frame -->
+            <div class="website-frame">
+                <div class="browser-bar">
+                    <div class="browser-dots">
+                        <div class="browser-dot dot-red"></div>
+                        <div class="browser-dot dot-yellow"></div>
+                        <div class="browser-dot dot-green"></div>
+                    </div>
+                    <div class="address-bar"></div>
+                </div>
+                <div class="website-screen">
+                    <div class="website-content">
+                        <div class="content-lines">
+                            <div class="content-line line-1"></div>
+                            <div class="content-line line-2"></div>
+                            <div class="content-line line-3"></div>
+                            <div class="content-line line-4"></div>
+                        </div>
+                    </div>
+                    <div class="error-overlay"></div>
+                </div>
+            </div>
+
+            <!-- Black Figure Maintenance Workers -->
+            <div class="maintenance-worker worker-1">
+                <div class="worker-head"></div>
+                <div class="worker-helmet"></div>
+                <div class="worker-body">
+                    <div class="worker-arms"></div>
+                    <div class="worker-legs"></div>
+                    <div class="worker-tool"></div>
+                </div>
+            </div>
+
+            <div class="maintenance-worker worker-2">
+                <div class="worker-head"></div>
+                <div class="worker-helmet"></div>
+                <div class="worker-body">
+                    <div class="worker-arms"></div>
+                    <div class="worker-legs"></div>
+                    <div class="worker-tool"></div>
+                </div>
+            </div>
+
+            <!-- Floating Elements -->
+            <div class="floating-elements">
+                <div class="floating-gear gear-1">
+                    <div class="gear"></div>
+                </div>
+                <div class="floating-gear gear-2">
+                    <div class="gear"></div>
+                </div>
+            </div>
+
+            <!-- Warning Icon -->
+            <div class="warning-icon">
+                <div class="warning-triangle"></div>
+            </div>
+        </div>
+        
+        <h2 class="message">Currently Under Maintenance</h2>
+        <p class="description">
+            We're performing scheduled maintenance to improve your experience. 
+            Our technical team is working hard to get everything back online soon.
+        </p>
+        
+        <div class="contact">
+            <p>Expected completion: Soon!</p>
+            <p>Questions? Contact us at <a href="mailto:eugeneantwi731@gmail.com">eugeneantwi731@gmail.com</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random positioning
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                
+                // Random animation delay and duration
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                
+                // Random size variation
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Simulate website loading and error
+        function simulateWebsiteError() {
+            setTimeout(() => {
+                // Add glitch effect to content lines
+                const lines = document.querySelectorAll('.content-line');
+                lines.forEach((line, index) => {
+                    setTimeout(() => {
+                        line.style.background = '#ff6b6b';
+                        setTimeout(() => {
+                            line.style.background = '#ddd';
+                        }, 200);
+                    }, index * 100);
+                });
+            }, 4000);
+        }
+
+        // Add mouse movement parallax effect
+        function addParallaxEffect() {
+            document.addEventListener('mousemove', function(e) {
+                const gears = document.querySelectorAll('.floating-gear');
+                const workers = document.querySelectorAll('.maintenance-worker');
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                
+                gears.forEach((gear, index) => {
+                    const speed = (index % 2 + 1) * 0.5;
+                    const translateX = (x - 0.5) * speed * 10;
+                    const translateY = (y - 0.5) * speed * 10;
+                    
+                    gear.style.transform += ` translate(${translateX}px, ${translateY}px)`;
+                });
+
+                workers.forEach((worker, index) => {
+                    const speed = (index % 2 + 1) * 0.3;
+                    const translateX = (x - 0.5) * speed * 5;
+                    
+                    worker.style.transform += ` translateX(${translateX}px)`;
+                });
+            });
+        }
+
+        // Restart animation loop
+        function restartAnimationLoop() {
+            setTimeout(() => {
+                // Reset all animations by forcing reflow
+                const animatedElements = document.querySelectorAll(
+                    '.content-line, .maintenance-worker, .floating-gear, .warning-icon'
+                );
+                
+                animatedElements.forEach(el => {
+                    el.style.animation = 'none';
+                    el.offsetHeight; // Trigger reflow
+                    el.style.animation = null;
+                });
+                
+                // Restart the loop
+                restartAnimationLoop();
+            }, 12000); // Restart every 12 seconds
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            simulateWebsiteError();
+            addParallaxEffect();
+            
+            // Start the animation loop after initial sequence
+            setTimeout(() => {
+                restartAnimationLoop();
+            }, 8000);
+        });
+    </script>
+</body>
+</html>
